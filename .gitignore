@@ -169,3 +169,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Exclude audio, image, and video files
+*.wav
+*.gif
+*.mp4
