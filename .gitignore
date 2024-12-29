@@ -177,3 +177,6 @@ cython_debug/
 
 # Workspace
 *.code-workspace
+
+# txt-files
+*.txt

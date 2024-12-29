@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw
-from moviepy import ImageSequenceClip, concatenate_videoclips, AudioFileClip
+from moviepy import ImageSequenceClip, AudioFileClip
 import numpy as np
 from pydub import AudioSegment
 from pydub.generators import Sine
@@ -17,14 +17,15 @@ MORSE_CODE = {
 }
 
 # Message to Convert
-message = "HELLO WORLD"
+message = "E E"
 
 # Convert Message to Morse Code
 def text_to_morse(text):
-    return ' '.join(MORSE_CODE[char] for char in text.upper())
+    return ' '.join(MORSE_CODE[char] if char != ' ' else '' for char in text.upper()).replace('  ', ' ')
 
 morse_message = text_to_morse(message)
 print(morse_message)
+print(f"Length of Morse message: {len(morse_message)}")
 
 # Image Settings
 image_size = (200, 200)
@@ -33,10 +34,10 @@ dot_color = "white"
 frames = []
 
 # Timing (in milliseconds) with larger pauses
-dot_time = 200  # Duration of a dot
-line_time = 600  # Duration of a dash
-symbol_pause = 400  # Larger pause between symbols
-word_pause = 1500  # Larger pause between words
+dot_time = 1000  # Duration of a dot
+line_time = 3000  # Duration of a dash
+symbol_pause = 2000  # Larger pause between symbols
+word_pause = 5000  # Larger pause between words
 
 # Create Frames for Morse Code
 for symbol in morse_message:
@@ -58,6 +59,7 @@ for symbol in morse_message:
         frames.append((pause_img, symbol_pause))
     elif symbol == " ":
         # Space Between Words
+        print("Space")
         img = Image.new("RGB", image_size, background_color)
         frames.append((img, word_pause))  # Pause between words
 
@@ -82,7 +84,7 @@ print(f"GIF saved as {output_file_gif}")
 
 # Generate Morse Code Audio
 audio = AudioSegment.silent(duration=0)
-frequency = 600  # Frequency of the Morse code tone
+frequency = 550  # Frequency of the Morse code tone
 
 for symbol in morse_message:
     if symbol == ".":
@@ -100,7 +102,12 @@ audio.export(audio_file, format="wav")
 
 # Save Frames as MP4
 output_file_mp4 = "hello_world_morse.mp4"
-fps = 1000 / min(durations)  # Calculate frames per second based on the smallest duration
+# Calculate frames per second (fps) based on the total duration of the audio
+total_duration_ms = len(audio)
+print(f"Total duration of the audio: {total_duration_ms} ms")
+total_frames = len(frames_list)
+print(f"Total frames: {total_frames}")  
+fps = total_frames / (total_duration_ms / 1000)  # Convert duration to seconds and calculate fps
 
 # Convert PIL images to numpy arrays
 frames_np = [np.array(frame) for frame in frames_list]
