@@ -3,6 +3,8 @@ from moviepy import ImageSequenceClip, AudioFileClip
 import numpy as np
 from pydub import AudioSegment
 from pydub.generators import Sine
+import subprocess
+
 
 # Morse-Code Definition
 MORSE_CODE = {
@@ -17,7 +19,7 @@ MORSE_CODE = {
 }
 
 # Message to Convert
-message = "E E"
+message = "Hello World"
 
 # Convert Message to Morse Code
 def text_to_morse(text):
@@ -34,10 +36,10 @@ dot_color = "white"
 frames = []
 
 # Timing (in milliseconds) with larger pauses
-dot_time = 1000  # Duration of a dot
-line_time = 3000  # Duration of a dash
-symbol_pause = 2000  # Larger pause between symbols
-word_pause = 5000  # Larger pause between words
+dot_time = 200  # Duration of a dot
+line_time = 400  # Duration of a dash
+symbol_pause = 300  # Larger pause between symbols
+word_pause = 600  # Larger pause between words
 
 # Create Frames for Morse Code
 for symbol in morse_message:
@@ -100,26 +102,27 @@ for symbol in morse_message:
 audio_file = "hello_world_morse.wav"
 audio.export(audio_file, format="wav")
 
-# Save Frames as MP4
-output_file_mp4 = "hello_world_morse.mp4"
-# Calculate frames per second (fps) based on the total duration of the audio
-total_duration_ms = len(audio)
-print(f"Total duration of the audio: {total_duration_ms} ms")
-total_frames = len(frames_list)
-print(f"Total frames: {total_frames}")  
-fps = total_frames / (total_duration_ms / 1000)  # Convert duration to seconds and calculate fps
 
-# Convert PIL images to numpy arrays
-frames_np = [np.array(frame) for frame in frames_list]
+# Dateinamen definieren
+gif_file = output_file_gif
+audio_file = audio_file
+output_file = "youtput___.mp4"
 
-# Create video clip
-clip = ImageSequenceClip(frames_np, fps=fps)
+# FFmpeg-Befehl erstellen
+command = [
+    "ffmpeg",
+    "-i", gif_file,  # Input GIF
+    "-i", audio_file,  # Input WAV
+    "-c:v", "libx264",  # Video-Codec
+    "-c:a", "aac",  # Audio-Codec
+    "-shortest",  # Kürze auf die kürzere Eingabe
+    output_file  # Output-Datei
+]
 
-# Add audio to the video clip
-audio_clip = AudioFileClip(audio_file)
-video_with_audio = clip.with_audio(audio_clip)
-
-# Write video file
-video_with_audio.write_videofile(output_file_mp4, codec='libx264', audio_codec='aac')
-
-print(f"MP4 saved as {output_file_mp4}")
+# FFmpeg-Befehl ausführen
+try:
+    subprocess.run(command, check=True)
+    print(f"Video erfolgreich erstellt: {output_file}")
+except subprocess.CalledProcessError as e:
+    print("Fehler beim Ausführen von FFmpeg:")
+    print(e)
