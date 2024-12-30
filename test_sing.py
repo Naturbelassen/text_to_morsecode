@@ -27,15 +27,15 @@ morse_message = text_to_morse(message)
 print(morse_message)
 
 # Image Settings
-image_size = (200, 200)
+image_size = (1920, 1080)
 background_color = "white"
 frames = []
 
 # Timing (in milliseconds) with larger pauses
-white_dot_time = 200  # Duration of a dot
-white_dash_time = 400  # Duration of a dash
-symbol_pause = 300  # Pause between symbols
-word_pause = 600  # Pause between words
+white_dot_time = 100  # Duration of a dot
+white_dash_time = 300  # Duration of a dash
+symbol_pause = 100  # Pause between symbols
+word_pause = 700  # Pause between words
 
 imgWhite = Image.new("RGB", image_size, background_color)
 imgBlack = Image.new("RGB", image_size, "black")
@@ -86,7 +86,6 @@ for symbol in morse_message:
 audio_file = "hello_world_morse.wav"
 audio.export(audio_file, format="wav")
 print(f"Audio saved as {audio_file}")
-
 
 # Dateinamen definieren
 gif_file = output_file_gif
