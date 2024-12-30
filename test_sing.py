@@ -12,16 +12,20 @@ MORSE_CODE = {
     'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-', 'Y': '-.--', 'Z': '--..',
     '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....',
     '6': '-....', '7': '--...', '8': '---..', '9': '----.', '0': '-----',
-    ' ': ' '
+    ' ': '/'
 }
 
 # Message to Convert
 message = "Hello World"
 
-# Convert Message to Morse Code
 def text_to_morse(text):
-    return ' '.join(MORSE_CODE[char] if char != ' ' else '' for char in text.upper()).replace('  ', ' ')
+    # Convert each character to Morse code
+    morse_code = ' '.join(MORSE_CODE[char] for char in text.upper() if char in MORSE_CODE)
+    return format_morse(morse_code)
 
+def format_morse(morse_code):
+    # Entferne Leerzeichen vor und nach `/`
+    return morse_code.replace(' / ', '/')
 
 morse_message = text_to_morse(message)
 print(morse_message)
@@ -39,6 +43,7 @@ word_pause = 700  # Pause between words
 
 imgWhite = Image.new("RGB", image_size, background_color)
 imgBlack = Image.new("RGB", image_size, "black")
+
 # Create Frames for Morse Code
 for symbol in morse_message:
     if symbol == ".":
@@ -51,7 +56,11 @@ for symbol in morse_message:
         frames.append((imgBlack, symbol_pause))  # Pause after the dash
     elif symbol == " ":
         # Space Between Words
+        frames.append((imgBlack, white_dash_time)) # Pause between characters
+    elif symbol == "/":
+        # Space Between Words
         frames.append((imgBlack, word_pause)) # Pause between words
+    
 
 # Save Frames as GIF
 output_file_gif = "hello_world_morse.gif"
@@ -80,6 +89,8 @@ for symbol in morse_message:
         audio += Sine(frequency).to_audio_segment(duration=white_dash_time)
         audio += AudioSegment.silent(duration=symbol_pause)
     elif symbol == " ":
+        audio += AudioSegment.silent(duration=white_dash_time)
+    elif symbol == "/":
         audio += AudioSegment.silent(duration=word_pause)
 
 # Save the audio file
@@ -90,7 +101,7 @@ print(f"Audio saved as {audio_file}")
 # Dateinamen definieren
 gif_file = output_file_gif
 audio_file = audio_file
-output_file = "output___.mp4"
+output_file = "newalleTimingsoutput___.mp4"
 
 # FFmpeg-Befehl erstellen
 command = [
