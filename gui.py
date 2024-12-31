@@ -3,6 +3,7 @@ from pydub.generators import Sine
 import threading
 from pydub.playback import play
 from test_sing import generate_morse_code_frames  
+from tkinter import PhotoImage
 
 def play_tone():
     global playing, current_audio
@@ -22,10 +23,13 @@ def on_generate():
     frequency = int(slider_frequency.get())
     generate_morse_code_frames(text, width, height, frequency)
 
-
 # Create the main window
 root = tk.Tk()
 root.title("Morse Code Generator")
+
+# Set the window icon
+icon = PhotoImage(file="yyy.png")  # Verwende eine .png-Datei
+root.wm_iconphoto(True, icon)
 
 # Create and place the widgets
 tk.Label(root, text="Enter text to decode:").grid(row=0, column=0, padx=10, pady=10)
