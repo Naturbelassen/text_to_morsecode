@@ -33,7 +33,6 @@ print(morse_message)
 def generate_morse_code_frames(text, width, height, frequency):
     morse_message = text_to_morse(message)
 
-
     # Image Settings
     image_size = (width, height)
     background_color = "white"
