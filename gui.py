@@ -2,6 +2,7 @@ import tkinter as tk
 from pydub.generators import Sine
 import threading
 from pydub.playback import play
+from test_sing import generate_morse_code_frames  
 
 def play_tone():
     global playing, current_audio
@@ -13,6 +14,14 @@ def play_audio():
     global current_audio
     play(current_audio)
     #current_audio.play()
+
+def on_generate():
+    text = entry_text.get()
+    width = int(spinbox_width.get())
+    height = int(spinbox_height.get())
+    frequency = int(slider_frequency.get())
+    generate_morse_code_frames(text, width, height, frequency)
+
 
 # Create the main window
 root = tk.Tk()
@@ -50,6 +59,9 @@ slider_frequency = tk.Scale(freq_chooser, from_=50, to=1000, orient="horizontal"
 slider_frequency.pack(side="left", padx=5)
 
 freq_play_button = tk.Button(freq_chooser, text="Play", command=play_tone).pack(side="left", padx=5)
+
+# Create the Generate button
+generate_button = tk.Button(root, text="Generate", command=on_generate).grid(row=4, column=0, columnspan=3, padx=10, pady=10)
 
 # Run the application
 root.mainloop()
