@@ -44,6 +44,9 @@ word_pause = 700  # Pause between words
 imgWhite = Image.new("RGB", image_size, background_color)
 imgBlack = Image.new("RGB", image_size, "black")
 
+# Puffer beginning
+frames.append((imgBlack, 100)) # Pause at the beginning
+
 # Create Frames for Morse Code
 for symbol in morse_message:
     if symbol == ".":
@@ -55,7 +58,7 @@ for symbol in morse_message:
         frames.append((imgWhite, white_dash_time))  # Frame for the dash
         frames.append((imgBlack, symbol_pause))  # Pause after the dash
     elif symbol == " ":
-        # Space Between Words
+        # Space Between Chars
         frames.append((imgBlack, white_dash_time)) # Pause between characters
     elif symbol == "/":
         # Space Between Words
@@ -78,7 +81,7 @@ frames_list[0].save(
 print(f"GIF saved as {output_file_gif}")
 
 # Generate Morse Code Audio
-audio = AudioSegment.silent(duration=0)
+audio = AudioSegment.silent(duration=100)
 frequency = 550  # Frequency of the Morse code tone
 
 for symbol in morse_message:
