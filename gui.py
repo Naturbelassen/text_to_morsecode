@@ -59,7 +59,7 @@ freq_chooser = tk.Frame(root)
 freq_chooser.grid(row=3, column=1, columnspan=2, padx=10, pady=10, sticky="w")
 
 tk.Label(root, text="Frequency (Hz):").grid(row=3, column=0, padx=10, pady=10)
-slider_frequency = tk.Scale(freq_chooser, from_=50, to=1000, orient="horizontal", length=300, width=14)
+slider_frequency = tk.Scale(freq_chooser, from_=50, to=20000, orient="horizontal", length=300, width=14)
 slider_frequency.pack(side="left", padx=5)
 
 freq_play_button = tk.Button(freq_chooser, text="Play", command=play_tone).pack(side="left", padx=5)
